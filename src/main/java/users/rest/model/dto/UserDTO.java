@@ -1,32 +1,22 @@
-package users.rest.model.entity;
+package users.rest.model.dto;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
 
 import java.time.LocalDate;
 
-@Entity
-@Table(name = "users")
-public class UserEntity {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class UserDTO {
     private Long id;
-    @Column(name = "first_name", nullable = false)
     private String firstName;
-    @Column(name = "last_name", nullable = false)
     private String lastName;
-    @Column(name = "birth_date", nullable = false)
     private LocalDate birthDate;
-    @Column(name = "phone_number", nullable = false, unique = true)
     private String phoneNumber;
-    @Column(name = "email", nullable = false, unique = true)
     private String email;
 
     public Long getId() {
         return id;
     }
 
-    public UserEntity setId(Long id) {
+    public UserDTO setId(Long id) {
         this.id = id;
         return this;
     }
@@ -35,7 +25,7 @@ public class UserEntity {
         return firstName;
     }
 
-    public UserEntity setFirstName(String firstName) {
+    public UserDTO setFirstName(String firstName) {
         this.firstName = firstName;
         return this;
     }
@@ -44,7 +34,7 @@ public class UserEntity {
         return lastName;
     }
 
-    public UserEntity setLastName(String lastName) {
+    public UserDTO setLastName(String lastName) {
         this.lastName = lastName;
         return this;
     }
@@ -53,7 +43,7 @@ public class UserEntity {
         return birthDate;
     }
 
-    public UserEntity setBirthDate(LocalDate birthDate) {
+    public UserDTO setBirthDate(LocalDate birthDate) {
         this.birthDate = birthDate;
         return this;
     }
@@ -62,7 +52,7 @@ public class UserEntity {
         return phoneNumber;
     }
 
-    public UserEntity setPhoneNumber(String phoneNumber) {
+    public UserDTO setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
         return this;
     }
@@ -71,9 +61,8 @@ public class UserEntity {
         return email;
     }
 
-    public UserEntity setEmail(String email) {
+    public UserDTO setEmail(String email) {
         this.email = email;
         return this;
     }
-
 }
