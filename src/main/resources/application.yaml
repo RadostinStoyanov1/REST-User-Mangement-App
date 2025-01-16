@@ -1,0 +1,23 @@
+
+spring:
+  application:
+    name: users-rest
+
+  datasource:
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/users_db?allowPublicKeyRetrieval=true&useSSL=false&createDatabaseIfNotExist=true&serverTimezone=UTC
+    username: root
+    password: 77DoR1&
+  jpa:
+    defer-datasource-initialization: true
+    properties:
+      hibernate:
+        format_sql: true
+    hibernate:
+      ddl-auto: update
+  sql:
+    init:
+      mode: never
+
+server:
+  port: 8081
