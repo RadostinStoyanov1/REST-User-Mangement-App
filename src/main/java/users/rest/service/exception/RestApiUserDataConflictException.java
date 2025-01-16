@@ -5,14 +5,14 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(code = HttpStatus.CONFLICT)
 public class RestApiUserDataConflictException extends RuntimeException{
-    private final Object id;
+    private final Object firstName;
 
-    public RestApiUserDataConflictException(String message, Object id) {
+    public RestApiUserDataConflictException(String message, Object firstName) {
         super(message);
-        this.id = id;
+        this.firstName = firstName;
     }
 
-    public Object getId() {
-        return id;
+    public Object getFirstName() {
+        return firstName;
     }
 }
