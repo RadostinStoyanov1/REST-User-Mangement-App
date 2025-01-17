@@ -14,7 +14,6 @@ public class AddUserDTO {
     @Size(min = 2, max = 30)
     private String lastName;
 
-    @NotEmpty
     private LocalDate birthDate;
 
     @Pattern(regexp = "[0-9]+", message = "Phone number must contain 10 digits only")

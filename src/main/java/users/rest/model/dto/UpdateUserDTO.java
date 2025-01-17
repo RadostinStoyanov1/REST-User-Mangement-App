@@ -20,7 +20,6 @@ public class UpdateUserDTO {
     @Size(min = 2, max = 30)
     private String lastName;
 
-    @NotEmpty
     private LocalDate birthDate;
 
     @Pattern(regexp = "[0-9]+")
