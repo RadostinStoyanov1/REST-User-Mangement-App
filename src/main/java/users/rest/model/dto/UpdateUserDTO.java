@@ -1,15 +1,11 @@
 package users.rest.model.dto;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 
 import java.time.LocalDate;
 
 public class UpdateUserDTO {
-
-    @NotEmpty
+    @NotNull
     private Long id;
 
     @NotEmpty
