@@ -10,6 +10,11 @@ import users.rest.repository.UserRepository;
 import users.rest.service.UserService;
 import users.rest.service.exception.RestApiUserNotFoundException;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
@@ -42,8 +47,27 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDTO updateUserById(UpdateUserDTO updateUserDTO) {
         UserEntity userEntity = modelMapper.map(updateUserDTO, UserEntity.class);
-
+        userRepository.updateUserEntityById(userEntity.getId(), userEntity.getFirstName(), userEntity.getLastName(), userEntity.getBirthDate(), userEntity.getPhoneNumber(), userEntity.getEmail());
         return modelMapper.map(userEntity, UserDTO.class);
+    }
+
+    @Override
+    public List<UserDTO> getAllUsers(String pattern) {
+        List<UserDTO> foundUsers = new ArrayList<>();
+        if (pattern.isBlank() || pattern == null) {
+            userRepository
+                    .findAll()
+                    .forEach(user -> foundUsers.add(modelMapper.map(user, UserDTO.class)));
+        } else {
+            userRepository
+                    .findAllByFirstNameOrLastNameContainingIgnoreCase(pattern)
+                    .forEach(user -> foundUsers.add(modelMapper.map(user, UserDTO.class)));
+        }
+
+        return foundUsers
+                .stream()
+                .sorted(Comparator.comparing(UserDTO::getLastName).thenComparing(UserDTO::getBirthDate))
+                .collect(Collectors.toList());
     }
 
 
