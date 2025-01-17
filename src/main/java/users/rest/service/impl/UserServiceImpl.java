@@ -8,6 +8,7 @@ import users.rest.model.dto.UserDTO;
 import users.rest.model.entity.UserEntity;
 import users.rest.repository.UserRepository;
 import users.rest.service.UserService;
+import users.rest.service.exception.RestApiBusyEmailOrPhoneNumberException;
 import users.rest.service.exception.RestApiUserNotFoundException;
 
 import java.util.ArrayList;
@@ -27,7 +28,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDTO createUserEntity(AddUserDTO addUserDTO) {
-        UserEntity userEntity = userRepository.save(modelMapper.map(addUserDTO, UserEntity.class));
+        UserEntity userEntity = modelMapper.map(addUserDTO, UserEntity.class);
+        if (isUsernameOrPasswordBusy(userEntity)) {
+            throw new RestApiBusyEmailOrPhoneNumberException("User with email " + userEntity.getEmail() + " or phone " + userEntity.getPhoneNumber() + " already exists", userEntity.getEmail(), userEntity.getPhoneNumber());
+        }
+        userRepository.save(userEntity);
         return modelMapper.map(userEntity, UserDTO.class);
     }
 
@@ -68,6 +73,14 @@ public class UserServiceImpl implements UserService {
                 .stream()
                 .sorted(Comparator.comparing(UserDTO::getLastName).thenComparing(UserDTO::getBirthDate))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public boolean isUsernameOrPasswordBusy(UserEntity userEntity) {
+        if (userRepository.findAllByPhoneNumberOrEmail(userEntity.getPhoneNumber(), userEntity.getEmail()).isEmpty()) {
+            return false;
+        }
+        return true;
     }
 
 }

@@ -26,4 +26,6 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
     //List<UserEntity> findAllByFirstNameContainingOrLastNameContaining(String pattern, String pattern2);
     @Query("SELECT u FROM UserEntity u WHERE LOWER(u.firstName) LIKE LOWER(CONCAT('%', :pattern, '%')) OR LOWER(u.lastName) LIKE LOWER(CONCAT('%', :pattern, '%'))")
     List<UserEntity> findAllByFirstNameOrLastNameContainingIgnoreCase(@Param("pattern") String pattern);
+
+    List<UserEntity> findAllByPhoneNumberOrEmail(String phoneNumber, String email);
 }

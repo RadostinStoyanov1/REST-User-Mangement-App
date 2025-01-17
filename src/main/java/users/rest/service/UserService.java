@@ -18,4 +18,6 @@ public interface UserService {
     public UserDTO updateUserById(UpdateUserDTO updateUserDTO);
 
     public List<UserDTO> getAllUsers(String pattern);
+
+    public boolean isUsernameOrPasswordBusy(UserEntity userEntity);
 }
