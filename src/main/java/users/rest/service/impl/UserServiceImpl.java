@@ -46,19 +46,30 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteUser(Long userId) {
+        if (userRepository.findById(userId).isEmpty()) {
+            throw new RestApiUserNotFoundException("User with id: " + userId + "was not found", userId);
+        }
         userRepository.deleteById(userId);
     }
 
     @Override
     public UserDTO updateUserById(UpdateUserDTO updateUserDTO) {
+
         UserEntity userEntity = modelMapper.map(updateUserDTO, UserEntity.class);
+
+        if (isUsernameOrPasswordBusy(userEntity)) {
+            throw new RestApiBusyEmailOrPhoneNumberException("User with email " + userEntity.getEmail() + " or phone " + userEntity.getPhoneNumber() + " already exists", userEntity.getEmail(), userEntity.getPhoneNumber());
+        }
+
         userRepository.updateUserEntityById(userEntity.getId(), userEntity.getFirstName(), userEntity.getLastName(), userEntity.getBirthDate(), userEntity.getPhoneNumber(), userEntity.getEmail());
         return modelMapper.map(userEntity, UserDTO.class);
     }
 
     @Override
     public List<UserDTO> getAllUsers(String pattern) {
+
         List<UserDTO> foundUsers = new ArrayList<>();
+
         if (pattern.isBlank() || pattern == null) {
             userRepository
                     .findAll()
@@ -77,9 +88,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean isUsernameOrPasswordBusy(UserEntity userEntity) {
+
         if (userRepository.findAllByPhoneNumberOrEmail(userEntity.getPhoneNumber(), userEntity.getEmail()).isEmpty()) {
             return false;
         }
+
         return true;
     }
 

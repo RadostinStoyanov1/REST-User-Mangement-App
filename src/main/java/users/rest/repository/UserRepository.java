@@ -28,4 +28,5 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
     List<UserEntity> findAllByFirstNameOrLastNameContainingIgnoreCase(@Param("pattern") String pattern);
 
     List<UserEntity> findAllByPhoneNumberOrEmail(String phoneNumber, String email);
+
 }
