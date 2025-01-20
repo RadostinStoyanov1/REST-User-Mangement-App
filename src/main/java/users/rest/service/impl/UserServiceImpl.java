@@ -62,7 +62,10 @@ public class UserServiceImpl implements UserService {
         UserEntity userEntity = modelMapper.map(updateUserDTO, UserEntity.class);
 
         if (isUsernameOrPasswordBusy(userEntity)) {
-            throw new RestApiBusyEmailOrPhoneNumberException("User with email " + userEntity.getEmail() + " or phone " + userEntity.getPhoneNumber() + " already exists", userEntity.getEmail(), userEntity.getPhoneNumber());
+            UserEntity foundEntity = userRepository.findById(userEntity.getId()).get();
+            if (foundEntity.getId() != userEntity.getId()) {
+                throw new RestApiBusyEmailOrPhoneNumberException("User with email " + userEntity.getEmail() + " or phone " + userEntity.getPhoneNumber() + " already exists", userEntity.getEmail(), userEntity.getPhoneNumber());
+            }
         }
 
         userRepository.updateUserEntityById(userEntity.getId(), userEntity.getFirstName(), userEntity.getLastName(), userEntity.getBirthDate(), userEntity.getPhoneNumber(), userEntity.getEmail());
