@@ -3,6 +3,7 @@ package users.rest.service.impl;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import users.rest.model.dto.AddUserDTO;
+import users.rest.model.dto.BooleanResultDTO;
 import users.rest.model.dto.UpdateUserDTO;
 import users.rest.model.dto.UserDTO;
 import users.rest.model.entity.UserEntity;
@@ -18,6 +19,9 @@ import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
+
+    private static final String UNIQUE = "UNIQUE";
+    private static final String USED = "USED";
     private final UserRepository userRepository;
     private final ModelMapper modelMapper;
 
@@ -85,6 +89,29 @@ public class UserServiceImpl implements UserService {
                 .sorted(Comparator.comparing(UserDTO::getLastName).thenComparing(UserDTO::getBirthDate))
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public BooleanResultDTO uniqueUserEmail(String email) {
+        BooleanResultDTO result = new BooleanResultDTO();
+        if (userRepository.findAllByEmail(email).isEmpty()) {
+            result.setResult(UNIQUE);
+        } else {
+            result.setResult(USED);
+        }
+        return result;
+    }
+
+    @Override
+    public BooleanResultDTO uniqueUserPhone(String phone) {
+        BooleanResultDTO result = new BooleanResultDTO();
+        if (userRepository.findAllByPhoneNumber(phone).isEmpty()) {
+            result.setResult(UNIQUE);
+        } else {
+            result.setResult(USED);
+        }
+        return result;
+    }
+
 
     @Override
     public boolean isUsernameOrPasswordBusy(UserEntity userEntity) {

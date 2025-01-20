@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import users.rest.model.dto.AddUserDTO;
+import users.rest.model.dto.BooleanResultDTO;
 import users.rest.model.dto.UpdateUserDTO;
 import users.rest.model.dto.UserDTO;
 import users.rest.service.UserService;
@@ -37,6 +38,20 @@ public class UserController {
     public ResponseEntity<List<UserDTO>> getAllUsers(@RequestParam("pattern") String pattern) {
         return ResponseEntity.ok(
             userService.getAllUsers(pattern)
+        );
+    }
+
+    @GetMapping("/by-email")
+    public ResponseEntity<BooleanResultDTO> getAllUsersByEmail(@RequestParam("pattern") String pattern) {
+        return ResponseEntity.ok(
+                userService.uniqueUserEmail(pattern)
+        );
+    }
+
+    @GetMapping("/by-phone")
+    public ResponseEntity<BooleanResultDTO> getAllUsersByPhone(@RequestParam("pattern") String pattern) {
+        return ResponseEntity.ok(
+                userService.uniqueUserPhone(pattern)
         );
     }
 
