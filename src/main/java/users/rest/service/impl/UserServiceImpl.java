@@ -61,11 +61,8 @@ public class UserServiceImpl implements UserService {
 
         UserEntity userEntity = modelMapper.map(updateUserDTO, UserEntity.class);
 
-        if (isUsernameOrPasswordBusy(userEntity)) {
-            UserEntity foundEntity = userRepository.findById(userEntity.getId()).get();
-            if (foundEntity.getId() != userEntity.getId()) {
-                throw new RestApiBusyEmailOrPhoneNumberException("User with email " + userEntity.getEmail() + " or phone " + userEntity.getPhoneNumber() + " already exists", userEntity.getEmail(), userEntity.getPhoneNumber());
-            }
+        if (isUserWithSameEmailOrPhoneExists(userEntity)) {
+            throw new RestApiBusyEmailOrPhoneNumberException("User with email " + userEntity.getEmail() + " or phone " + userEntity.getPhoneNumber() + " already exists", userEntity.getEmail(), userEntity.getPhoneNumber());
         }
 
         userRepository.updateUserEntityById(userEntity.getId(), userEntity.getFirstName(), userEntity.getLastName(), userEntity.getBirthDate(), userEntity.getPhoneNumber(), userEntity.getEmail());
@@ -124,6 +121,23 @@ public class UserServiceImpl implements UserService {
         }
 
         return true;
+    }
+
+    @Override
+    public boolean isUserWithSameEmailOrPhoneExists(UserEntity userEntity) {
+
+        List<UserEntity> foundUsers = userRepository.findAllByPhoneNumberOrEmail(userEntity.getPhoneNumber(), userEntity.getEmail());
+
+        if (foundUsers.isEmpty()) {
+            return false;
+        }
+
+        for (UserEntity foundUser : foundUsers) {
+            if (foundUser.getId() != userEntity.getId()) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }

@@ -25,4 +25,6 @@ public interface UserService {
     public BooleanResultDTO uniqueUserPhone(String phone);
 
     public boolean isUsernameOrPasswordBusy(UserEntity userEntity);
+
+    public boolean isUserWithSameEmailOrPhoneExists(UserEntity userEntity);
 }
