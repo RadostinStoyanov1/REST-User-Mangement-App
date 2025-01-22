@@ -1,12 +1,11 @@
 package users.rest.web;
 
 import jakarta.validation.Valid;
-import org.apache.catalina.connector.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import users.rest.model.dto.AddUserDTO;
-import users.rest.model.dto.BooleanResultDTO;
+import users.rest.model.dto.StringResultDTO;
 import users.rest.model.dto.UpdateUserDTO;
 import users.rest.model.dto.UserDTO;
 import users.rest.service.UserService;
@@ -42,14 +41,14 @@ public class UserController {
     }
 
     @GetMapping("/by-email")
-    public ResponseEntity<BooleanResultDTO> getAllUsersByEmail(@RequestParam("pattern") String pattern) {
+    public ResponseEntity<StringResultDTO> getAllUsersByEmail(@RequestParam("pattern") String pattern) {
         return ResponseEntity.ok(
                 userService.uniqueUserEmail(pattern)
         );
     }
 
     @GetMapping("/by-phone")
-    public ResponseEntity<BooleanResultDTO> getAllUsersByPhone(@RequestParam("pattern") String pattern) {
+    public ResponseEntity<StringResultDTO> getAllUsersByPhone(@RequestParam("pattern") String pattern) {
         return ResponseEntity.ok(
                 userService.uniqueUserPhone(pattern)
         );
@@ -62,8 +61,10 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<UserDTO> deleteUserById(@PathVariable("id") Long id) {
+    public ResponseEntity<StringResultDTO> deleteUserById(@PathVariable("id") Long id) {
         userService.deleteUser(id);
-        return ResponseEntity.noContent().build();
+        StringResultDTO message = new StringResultDTO();
+        message.setData("deleted");
+        return new ResponseEntity<StringResultDTO>(message, HttpStatus.OK);
     }
 }

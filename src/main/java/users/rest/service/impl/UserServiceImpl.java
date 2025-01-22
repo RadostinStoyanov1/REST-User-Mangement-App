@@ -3,7 +3,7 @@ package users.rest.service.impl;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import users.rest.model.dto.AddUserDTO;
-import users.rest.model.dto.BooleanResultDTO;
+import users.rest.model.dto.StringResultDTO;
 import users.rest.model.dto.UpdateUserDTO;
 import users.rest.model.dto.UserDTO;
 import users.rest.model.entity.UserEntity;
@@ -49,11 +49,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void deleteUser(Long userId) {
+    public boolean deleteUser(Long userId) {
         if (userRepository.findById(userId).isEmpty()) {
             throw new RestApiUserNotFoundException("User with id: " + userId + "was not found", userId);
         }
         userRepository.deleteById(userId);
+
+        return true;
     }
 
     @Override
@@ -91,23 +93,23 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public BooleanResultDTO uniqueUserEmail(String email) {
-        BooleanResultDTO result = new BooleanResultDTO();
+    public StringResultDTO uniqueUserEmail(String email) {
+        StringResultDTO result = new StringResultDTO();
         if (userRepository.findAllByEmail(email).isEmpty()) {
-            result.setResult(UNIQUE);
+            result.setData(UNIQUE);
         } else {
-            result.setResult(USED);
+            result.setData(USED);
         }
         return result;
     }
 
     @Override
-    public BooleanResultDTO uniqueUserPhone(String phone) {
-        BooleanResultDTO result = new BooleanResultDTO();
+    public StringResultDTO uniqueUserPhone(String phone) {
+        StringResultDTO result = new StringResultDTO();
         if (userRepository.findAllByPhoneNumber(phone).isEmpty()) {
-            result.setResult(UNIQUE);
+            result.setData(UNIQUE);
         } else {
-            result.setResult(USED);
+            result.setData(USED);
         }
         return result;
     }
