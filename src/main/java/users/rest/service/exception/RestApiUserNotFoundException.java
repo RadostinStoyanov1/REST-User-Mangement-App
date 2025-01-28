@@ -5,14 +5,14 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(code = HttpStatus.NOT_FOUND)
 public class RestApiUserNotFoundException extends RuntimeException {
-    private final Object id;
+    private final Long id;
 
-    public RestApiUserNotFoundException(String message, Object id) {
+    public RestApiUserNotFoundException(String message, Long id) {
         super(message);
         this.id = id;
     }
 
-    public Object getId() {
+    public Long getId() {
         return id;
     }
 }
