@@ -10,6 +10,7 @@ import users.rest.model.entity.UserEntity;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.UUID;
 
 @Repository
 public interface UserRepository extends JpaRepository<UserEntity, Long> {
@@ -32,5 +33,9 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
     List<UserEntity> findAllByEmail(String email);
 
     List<UserEntity> findAllByPhoneNumber(String phone);
+
+    UserEntity findByUuid(UUID uuid);
+
+    void deleteByUuid(UUID uuid);
 
 }

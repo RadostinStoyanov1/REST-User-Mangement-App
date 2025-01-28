@@ -3,10 +3,11 @@ package users.rest.model.dto;
 import jakarta.validation.constraints.*;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 public class UpdateUserDTO {
     @NotNull
-    private Long id;
+    private UUID uuid;
 
     @NotEmpty
     @Size(min = 2, max = 30)
@@ -27,8 +28,8 @@ public class UpdateUserDTO {
     @Email(regexp = ".*@.*")
     private String email;
 
-    public Long getId() {
-        return id;
+    public UUID getUuid() {
+        return uuid;
     }
 
     public String getFirstName() {

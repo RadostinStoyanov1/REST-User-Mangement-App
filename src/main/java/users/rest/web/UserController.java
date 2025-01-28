@@ -35,9 +35,8 @@ public class UserController {
 
     @GetMapping("/all")
     public ResponseEntity<List<UserDTO>> getAllUsers(@RequestParam("pattern") String pattern) {
-        return ResponseEntity.ok(
-            userService.getAllUsers(pattern)
-        );
+        List<UserDTO> allFoundUsers = userService.getAllUsers(pattern);
+        return ResponseEntity.ok(allFoundUsers);
     }
 
     @GetMapping("/by-email")

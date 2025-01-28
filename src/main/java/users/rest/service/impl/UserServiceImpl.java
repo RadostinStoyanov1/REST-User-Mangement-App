@@ -15,6 +15,7 @@ import users.rest.service.exception.RestApiUserNotFoundException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -30,28 +31,24 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDTO createUserEntity(AddUserDTO addUserDTO) {
-        UserEntity userEntity = modelMapper.map(addUserDTO, UserEntity.class);
+        UserEntity userEntity = mapAddUserDTOToUserEntity(addUserDTO);
         if (isUsernameOrPasswordBusy(userEntity)) {
             throw new RestApiBusyEmailOrPhoneNumberException("User with email " + userEntity.getEmail() + " or phone " + userEntity.getPhoneNumber() + " already exists", userEntity.getEmail(), userEntity.getPhoneNumber());
         }
         userRepository.save(userEntity);
-        return modelMapper.map(userEntity, UserDTO.class);
+        return mapUserEntityToUserDTO(userEntity);
     }
 
     @Override
-    public UserDTO getUserById(Long id) {
-        return userRepository
-                .findById(id)
-                .map(o -> modelMapper.map(o, UserDTO.class))
-                .orElseThrow(() -> new RestApiUserNotFoundException("User with id: " + id + "was not found", id));
+    public UserDTO getUserByUuid(UUID uuid) {
+
+        return mapUserEntityToUserDTO(userRepository.findByUuid(uuid));
     }
 
     @Override
-    public boolean deleteUser(Long userId) {
-        if (userRepository.findById(userId).isEmpty()) {
-            throw new RestApiUserNotFoundException("User with id: " + userId + "was not found", userId);
-        }
-        userRepository.deleteById(userId);
+    public boolean deleteUser(UUID uuid) {
+
+        userRepository.deleteByUuid(uuid);
 
         return true;
     }
@@ -65,8 +62,10 @@ public class UserServiceImpl implements UserService {
             throw new RestApiBusyEmailOrPhoneNumberException("User with email " + userEntity.getEmail() + " or phone " + userEntity.getPhoneNumber() + " already exists", userEntity.getEmail(), userEntity.getPhoneNumber());
         }
 
-        userRepository.updateUserEntityById(userEntity.getId(), userEntity.getFirstName(), userEntity.getLastName(), userEntity.getBirthDate(), userEntity.getPhoneNumber(), userEntity.getEmail());
-        return modelMapper.map(userEntity, UserDTO.class);
+        //userRepository.updateUserEntityById(userEntity.getId(), userEntity.getFirstName(), userEntity.getLastName(), userEntity.getBirthDate(), userEntity.getPhoneNumber(), userEntity.getEmail());
+        userRepository.save(userEntity);
+
+        return mapUserEntityToUserDTO(userEntity);
     }
 
     @Override
@@ -74,14 +73,14 @@ public class UserServiceImpl implements UserService {
 
         List<UserDTO> foundUsers = new ArrayList<>();
 
-        if (pattern.isBlank() || pattern == null) {
+        if (pattern == null || pattern.isBlank()) {
             userRepository
                     .findAll()
-                    .forEach(user -> foundUsers.add(modelMapper.map(user, UserDTO.class)));
+                    .forEach(user -> foundUsers.add(mapUserEntityToUserDTO(user)));
         } else {
             userRepository
                     .findAllByFirstNameOrLastNameContainingIgnoreCase(pattern)
-                    .forEach(user -> foundUsers.add(modelMapper.map(user, UserDTO.class)));
+                    .forEach(user -> foundUsers.add(mapUserEntityToUserDTO(user)));
         }
 
         return foundUsers
@@ -140,4 +139,35 @@ public class UserServiceImpl implements UserService {
         return false;
     }
 
+    private UserDTO mapUserEntityToUserDTO(UserEntity user) {
+        return new UserDTO.Builder()
+                .uuid(user.getUuid())
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
+                .birthDate(user.getBirthDate())
+                .phoneNumber(user.getPhoneNumber())
+                .email(user.getEmail())
+                .build();
+    }
+
+    private UserEntity mapAddUserDTOToUserEntity(AddUserDTO addUserDTO) {
+        return new UserEntity.Builder()
+                .firstName(addUserDTO.getFirstName())
+                .lastName(addUserDTO.getLastName())
+                .birthDate(addUserDTO.getBirthDate())
+                .email(addUserDTO.getEmail())
+                .phoneNumber(addUserDTO.getPhoneNumber())
+                .build();
+    }
+
+    private UserEntity mapUpdateUserDTOToUserEntity(UpdateUserDTO updateUserDTO) {
+        return new UserEntity.Builder()
+                .uuid(updateUserDTO.getUuid())
+                .firstName(updateUserDTO.getFirstName())
+                .lastName(updateUserDTO.getLastName())
+                .birthDate(updateUserDTO.getBirthDate())
+                .phoneNumber(updateUserDTO.getPhoneNumber())
+                .email(updateUserDTO.getEmail())
+                .build();
+    }
 }

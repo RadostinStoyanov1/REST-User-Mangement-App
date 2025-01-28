@@ -7,14 +7,15 @@ import users.rest.model.dto.UserDTO;
 import users.rest.model.entity.UserEntity;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface UserService {
 
     public UserDTO createUserEntity(AddUserDTO addUserDTO);
 
-    public UserDTO getUserById(Long id);
+    public UserDTO getUserByUuid(UUID uuid);
 
-    public boolean deleteUser(Long userId);
+    public boolean deleteUser(UUID uuid);
 
     public UserDTO updateUserById(UpdateUserDTO updateUserDTO);
 
