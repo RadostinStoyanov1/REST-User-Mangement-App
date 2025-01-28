@@ -3,7 +3,7 @@ package users.rest.service.impl;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import users.rest.model.dto.AddUserDTO;
-import users.rest.model.dto.StringResultDTO;
+import users.rest.model.dto.BooleanResultDTO;
 import users.rest.model.dto.UpdateUserDTO;
 import users.rest.model.dto.UserDTO;
 import users.rest.model.entity.UserEntity;
@@ -20,8 +20,6 @@ import java.util.stream.Collectors;
 @Service
 public class UserServiceImpl implements UserService {
 
-    private static final String UNIQUE = "UNIQUE";
-    private static final String USED = "USED";
     private final UserRepository userRepository;
     private final ModelMapper modelMapper;
 
@@ -93,23 +91,23 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public StringResultDTO uniqueUserEmail(String email) {
-        StringResultDTO result = new StringResultDTO();
+    public BooleanResultDTO uniqueUserEmail(String email) {
+        BooleanResultDTO result = new BooleanResultDTO();
         if (userRepository.findAllByEmail(email).isEmpty()) {
-            result.setData(UNIQUE);
+            result.setData(true);
         } else {
-            result.setData(USED);
+            result.setData(false);
         }
         return result;
     }
 
     @Override
-    public StringResultDTO uniqueUserPhone(String phone) {
-        StringResultDTO result = new StringResultDTO();
+    public BooleanResultDTO uniqueUserPhone(String phone) {
+        BooleanResultDTO result = new BooleanResultDTO();
         if (userRepository.findAllByPhoneNumber(phone).isEmpty()) {
-            result.setData(UNIQUE);
+            result.setData(true);
         } else {
-            result.setData(USED);
+            result.setData(false);
         }
         return result;
     }

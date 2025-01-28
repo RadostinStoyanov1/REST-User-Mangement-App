@@ -5,7 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import users.rest.model.dto.AddUserDTO;
-import users.rest.model.dto.StringResultDTO;
+import users.rest.model.dto.BooleanResultDTO;
 import users.rest.model.dto.UpdateUserDTO;
 import users.rest.model.dto.UserDTO;
 import users.rest.service.UserService;
@@ -41,14 +41,14 @@ public class UserController {
     }
 
     @GetMapping("/by-email")
-    public ResponseEntity<StringResultDTO> getAllUsersByEmail(@RequestParam("pattern") String pattern) {
+    public ResponseEntity<BooleanResultDTO> checkIfUserWithPatternEmailExists(@RequestParam("pattern") String pattern) {
         return ResponseEntity.ok(
                 userService.uniqueUserEmail(pattern)
         );
     }
 
     @GetMapping("/by-phone")
-    public ResponseEntity<StringResultDTO> getAllUsersByPhone(@RequestParam("pattern") String pattern) {
+    public ResponseEntity<BooleanResultDTO> checkIfUserWithPatternPhoneExists(@RequestParam("pattern") String pattern) {
         return ResponseEntity.ok(
                 userService.uniqueUserPhone(pattern)
         );
@@ -61,10 +61,10 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<StringResultDTO> deleteUserById(@PathVariable("id") Long id) {
+    public ResponseEntity<BooleanResultDTO> deleteUserById(@PathVariable("id") Long id) {
         userService.deleteUser(id);
-        StringResultDTO message = new StringResultDTO();
-        message.setData("deleted");
-        return new ResponseEntity<StringResultDTO>(message, HttpStatus.OK);
+        BooleanResultDTO message = new BooleanResultDTO();
+        message.setData(true);
+        return new ResponseEntity<BooleanResultDTO>(message, HttpStatus.OK);
     }
 }
