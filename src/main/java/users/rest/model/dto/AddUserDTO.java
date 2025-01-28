@@ -29,45 +29,20 @@ public class AddUserDTO {
         return firstName;
     }
 
-    public AddUserDTO setFirstName(String firstName) {
-        this.firstName = firstName;
-        return this;
-    }
-
     public String getLastName() {
         return lastName;
-    }
-
-    public AddUserDTO setLastName(String lastName) {
-        this.lastName = lastName;
-        return this;
     }
 
     public LocalDate getBirthDate() {
         return birthDate;
     }
 
-    public AddUserDTO setBirthDate(LocalDate birthDate) {
-        this.birthDate = birthDate;
-        return this;
-    }
-
     public String getPhoneNumber() {
         return phoneNumber;
     }
 
-    public AddUserDTO setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-        return this;
-    }
-
     public String getEmail() {
         return email;
-    }
-
-    public AddUserDTO setEmail(String email) {
-        this.email = email;
-        return this;
     }
 
 }
