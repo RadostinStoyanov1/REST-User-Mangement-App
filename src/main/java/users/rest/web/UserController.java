@@ -11,6 +11,7 @@ import users.rest.model.dto.UserDTO;
 import users.rest.service.UserService;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/users")
@@ -28,9 +29,9 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserDTO> getById(@PathVariable("id") Long id) {
+    public ResponseEntity<UserDTO> getById(@PathVariable("id") UUID uuid) {
         return ResponseEntity
-                .ok(userService.getUserById(id));
+                .ok(userService.getUserByUuid(uuid));
     }
 
     @GetMapping("/all")
@@ -60,8 +61,8 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<BooleanResultDTO> deleteUserById(@PathVariable("id") Long id) {
-        userService.deleteUser(id);
+    public ResponseEntity<BooleanResultDTO> deleteUserById(@PathVariable("id") UUID uuid) {
+        userService.deleteUser(uuid);
         BooleanResultDTO message = new BooleanResultDTO();
         message.setData(true);
         return new ResponseEntity<BooleanResultDTO>(message, HttpStatus.OK);
