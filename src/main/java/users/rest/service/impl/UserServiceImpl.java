@@ -46,8 +46,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean deleteUser(UUID uuid) {
-
-        userRepository.deleteByUuid(uuid);
+        UserEntity userToBeDeleted = userRepository.findByUuid(uuid).orElseThrow(() -> new RestApiUserNotFoundException("User with UUID: " + uuid + " was not found", uuid));
+        userRepository.deleteById(userToBeDeleted.getId());
 
         return true;
     }
@@ -62,7 +62,7 @@ public class UserServiceImpl implements UserService {
             throw new RestApiBusyEmailOrPhoneNumberException("User with email " + userEntity.getEmail() + " or phone " + userEntity.getPhoneNumber() + " already exists", userEntity.getEmail(), userEntity.getPhoneNumber());
         }*/
 
-        //Change in used repository method for updated UserEntity save operation:
+        //Change in used repository method for updated UserEntity save operation - save instead of update:
         //userRepository.updateUserEntityById(userEntity.getId(), userEntity.getFirstName(), userEntity.getLastName(), userEntity.getBirthDate(), userEntity.getPhoneNumber(), userEntity.getEmail());
         userRepository.save(userEntity);
 
@@ -162,6 +162,7 @@ public class UserServiceImpl implements UserService {
 
     private UserEntity mapUpdateUserDTOToUserEntity(UpdateUserDTO updateUserDTO) {
         return new UserEntity.Builder()
+                .id(getUserIdByUuid(updateUserDTO.getUuid()))
                 .uuid(updateUserDTO.getUuid())
                 .firstName(updateUserDTO.getFirstName())
                 .lastName(updateUserDTO.getLastName())
@@ -169,5 +170,9 @@ public class UserServiceImpl implements UserService {
                 .phoneNumber(updateUserDTO.getPhoneNumber())
                 .email(updateUserDTO.getEmail())
                 .build();
+    }
+
+    private Long getUserIdByUuid(UUID uuid) {
+        return userRepository.findByUuid(uuid).orElseThrow(() -> new RestApiUserNotFoundException("User with UUID: " + uuid + " was not found", uuid)).getId();
     }
 }
