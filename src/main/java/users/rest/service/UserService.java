@@ -21,9 +21,9 @@ public interface UserService {
 
     public List<UserDTO> getAllUsers(String pattern);
 
-    public BooleanResultDTO uniqueUserEmail(String email);
+    public BooleanResultDTO checkIfUserEmailIsUnique(String email);
 
-    public BooleanResultDTO uniqueUserPhone(String phone);
+    public BooleanResultDTO checkIfUserPhoneIsUnique(String phone);
 
     public boolean checkIfUserWithSameEmailOrPhoneAlreadyExists(UserEntity userEntity);
 

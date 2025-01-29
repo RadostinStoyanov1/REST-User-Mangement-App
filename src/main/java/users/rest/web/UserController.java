@@ -43,14 +43,14 @@ public class UserController {
     @GetMapping("/by-email")
     public ResponseEntity<BooleanResultDTO> checkIfUserWithPatternEmailExists(@RequestParam("pattern") String pattern) {
         return ResponseEntity.ok(
-                userService.uniqueUserEmail(pattern)
+                userService.checkIfUserEmailIsUnique(pattern)
         );
     }
 
     @GetMapping("/by-phone")
     public ResponseEntity<BooleanResultDTO> checkIfUserWithPatternPhoneExists(@RequestParam("pattern") String pattern) {
         return ResponseEntity.ok(
-                userService.uniqueUserPhone(pattern)
+                userService.checkIfUserPhoneIsUnique(pattern)
         );
     }
 

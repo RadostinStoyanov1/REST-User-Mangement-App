@@ -91,7 +91,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public BooleanResultDTO uniqueUserEmail(String email) {
+    public BooleanResultDTO checkIfUserEmailIsUnique(String email) {
 
         if (userRepository.findAllByEmail(email).isEmpty()) {
             return new BooleanResultDTO.Builder().data(true).build();
@@ -101,7 +101,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public BooleanResultDTO uniqueUserPhone(String phone) {
+    public BooleanResultDTO checkIfUserPhoneIsUnique(String phone) {
 
         if (userRepository.findAllByPhoneNumber(phone).isEmpty()) {
             return new BooleanResultDTO.Builder().data(true).build();
