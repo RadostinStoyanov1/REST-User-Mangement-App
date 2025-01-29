@@ -91,24 +91,24 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public BooleanResultDTO uniqueUserEmail(String email) {
-        BooleanResultDTO result = new BooleanResultDTO();
+
         if (userRepository.findAllByEmail(email).isEmpty()) {
-            result.setData(true);
+            return new BooleanResultDTO.Builder().data(true).build();
         } else {
-            result.setData(false);
+            return new BooleanResultDTO.Builder().data(false).build();
         }
-        return result;
+
     }
 
     @Override
     public BooleanResultDTO uniqueUserPhone(String phone) {
-        BooleanResultDTO result = new BooleanResultDTO();
+
         if (userRepository.findAllByPhoneNumber(phone).isEmpty()) {
-            result.setData(true);
+            return new BooleanResultDTO.Builder().data(true).build();
         } else {
-            result.setData(false);
+            return new BooleanResultDTO.Builder().data(false).build();
         }
-        return result;
+
     }
 
 
