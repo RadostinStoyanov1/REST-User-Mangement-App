@@ -56,15 +56,14 @@ public class UserController {
 
     @PutMapping
     public ResponseEntity<UserDTO> updateUser(@Valid @RequestBody UpdateUserDTO updateUserDTO) {
-        UserDTO userResponse = userService.updateUserById(updateUserDTO);
+        UserDTO userResponse = userService.updateUserByUuid(updateUserDTO);
         return new ResponseEntity<UserDTO>(userResponse, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<BooleanResultDTO> deleteUserById(@PathVariable("id") UUID uuid) {
         userService.deleteUser(uuid);
-        BooleanResultDTO message = new BooleanResultDTO();
-        message.setData(true);
+        BooleanResultDTO message = new BooleanResultDTO.Builder().data(true).build();
         return new ResponseEntity<BooleanResultDTO>(message, HttpStatus.OK);
     }
 }

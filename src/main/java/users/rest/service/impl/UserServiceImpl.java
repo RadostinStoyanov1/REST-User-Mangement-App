@@ -42,7 +42,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDTO getUserByUuid(UUID uuid) {
 
-        return mapUserEntityToUserDTO(userRepository.findByUuid(uuid));
+        return mapUserEntityToUserDTO(userRepository.findByUuid(uuid).orElseThrow(() -> new RestApiUserNotFoundException("User with UUID: " + uuid + " was not found", uuid)));
     }
 
     @Override
@@ -54,7 +54,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDTO updateUserById(UpdateUserDTO updateUserDTO) {
+    public UserDTO updateUserByUuid(UpdateUserDTO updateUserDTO) {
 
         UserEntity userEntity = modelMapper.map(updateUserDTO, UserEntity.class);
 

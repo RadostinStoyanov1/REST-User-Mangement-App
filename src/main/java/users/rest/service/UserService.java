@@ -17,7 +17,7 @@ public interface UserService {
 
     public boolean deleteUser(UUID uuid);
 
-    public UserDTO updateUserById(UpdateUserDTO updateUserDTO);
+    public UserDTO updateUserByUuid(UpdateUserDTO updateUserDTO);
 
     public List<UserDTO> getAllUsers(String pattern);
 
