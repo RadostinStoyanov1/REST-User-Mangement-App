@@ -12,19 +12,6 @@ import users.rest.model.entity.UserEntity;
 public class AppConfig {
     @Bean
     public ModelMapper modelMapper() {
-
-        final ModelMapper modelMapper = new ModelMapper();
-
-        Converter<UserEntity, UserDTO> userEntityUserDTOConverter = new Converter<UserEntity, UserDTO>() {
-            @Override
-            public UserDTO convert(MappingContext<UserEntity, UserDTO> context) {
-                UserEntity source = context.getSource();
-                UserDTO destination = context.getDestination();
-
-                return destination;
-            }
-        };
-
-        return modelMapper;
+        return new ModelMapper();
     }
 }

@@ -22,19 +22,18 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-    private final ModelMapper modelMapper;
 
-    public UserServiceImpl(UserRepository userRepository, ModelMapper modelMapper) {
+    public UserServiceImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
-        this.modelMapper = modelMapper;
     }
 
     @Override
     public UserDTO createUserEntity(AddUserDTO addUserDTO) {
         UserEntity userEntity = mapAddUserDTOToUserEntity(addUserDTO);
-        if (isUsernameOrPasswordBusy(userEntity)) {
+        //Removed check for already existing user with same email or phone:
+        /*if (checkIfUserWithSameEmailOrPhoneAlreadyExists(userEntity)) {
             throw new RestApiBusyEmailOrPhoneNumberException("User with email " + userEntity.getEmail() + " or phone " + userEntity.getPhoneNumber() + " already exists", userEntity.getEmail(), userEntity.getPhoneNumber());
-        }
+        }*/
         userRepository.save(userEntity);
         return mapUserEntityToUserDTO(userEntity);
     }
@@ -56,12 +55,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDTO updateUserByUuid(UpdateUserDTO updateUserDTO) {
 
-        UserEntity userEntity = modelMapper.map(updateUserDTO, UserEntity.class);
+        UserEntity userEntity = mapUpdateUserDTOToUserEntity(updateUserDTO);
 
-        if (isUserWithSameEmailOrPhoneExists(userEntity)) {
+        ////Removed check for another already existing user with same email or phone:
+        /*if (checkIfAnotherUserWithSameEmailOrPhoneExists(userEntity)) {
             throw new RestApiBusyEmailOrPhoneNumberException("User with email " + userEntity.getEmail() + " or phone " + userEntity.getPhoneNumber() + " already exists", userEntity.getEmail(), userEntity.getPhoneNumber());
-        }
+        }*/
 
+        //Change in used repository method for updated UserEntity save operation:
         //userRepository.updateUserEntityById(userEntity.getId(), userEntity.getFirstName(), userEntity.getLastName(), userEntity.getBirthDate(), userEntity.getPhoneNumber(), userEntity.getEmail());
         userRepository.save(userEntity);
 
@@ -97,7 +98,6 @@ public class UserServiceImpl implements UserService {
         } else {
             return new BooleanResultDTO.Builder().data(false).build();
         }
-
     }
 
     @Override
@@ -113,7 +113,7 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public boolean isUsernameOrPasswordBusy(UserEntity userEntity) {
+    public boolean checkIfUserWithSameEmailOrPhoneAlreadyExists(UserEntity userEntity) {
 
         if (userRepository.findAllByPhoneNumberOrEmail(userEntity.getPhoneNumber(), userEntity.getEmail()).isEmpty()) {
             return false;
@@ -123,7 +123,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean isUserWithSameEmailOrPhoneExists(UserEntity userEntity) {
+    public boolean checkIfAnotherUserWithSameEmailOrPhoneExists(UserEntity userEntity) {
 
         List<UserEntity> foundUsers = userRepository.findAllByPhoneNumberOrEmail(userEntity.getPhoneNumber(), userEntity.getEmail());
 
