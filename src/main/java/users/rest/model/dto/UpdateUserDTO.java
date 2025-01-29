@@ -25,7 +25,7 @@ public class UpdateUserDTO {
     @Size(min = 10, max = 10)
     private String phoneNumber;
 
-    @Email(regexp = ".*@.*")
+    @Email
     private String email;
 
     public UUID getUuid() {

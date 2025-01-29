@@ -35,7 +35,7 @@ public class UserController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<UserDTO>> getAllUsers(@RequestParam("pattern") String pattern) {
+    public ResponseEntity<List<UserDTO>> getAllUsers(@RequestParam(name = "pattern", required = false) String pattern) {
         List<UserDTO> allFoundUsers = userService.getAllUsers(pattern);
         return ResponseEntity.ok(allFoundUsers);
     }
@@ -57,7 +57,7 @@ public class UserController {
     @PutMapping
     public ResponseEntity<UserDTO> updateUser(@Valid @RequestBody UpdateUserDTO updateUserDTO) {
         UserDTO userResponse = userService.updateUserByUuid(updateUserDTO);
-        return new ResponseEntity<UserDTO>(userResponse, HttpStatus.CREATED);
+        return new ResponseEntity<UserDTO>(userResponse, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

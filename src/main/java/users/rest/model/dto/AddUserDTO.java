@@ -22,7 +22,7 @@ public class AddUserDTO {
     @Size(min = 10, max = 10)
     private String phoneNumber;
 
-    @Email(regexp = ".*@.*")
+    @Email
     private String email;
 
     public String getFirstName() {
