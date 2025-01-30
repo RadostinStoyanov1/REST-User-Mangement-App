@@ -1,6 +1,5 @@
 package users.rest.service.impl;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import users.rest.model.dto.AddUserDTO;
 import users.rest.model.dto.BooleanResultDTO;
@@ -9,7 +8,6 @@ import users.rest.model.dto.UserDTO;
 import users.rest.model.entity.UserEntity;
 import users.rest.repository.UserRepository;
 import users.rest.service.UserService;
-import users.rest.service.exception.RestApiBusyEmailOrPhoneNumberException;
 import users.rest.service.exception.RestApiUserNotFoundException;
 
 import java.util.ArrayList;
