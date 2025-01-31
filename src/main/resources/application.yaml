@@ -24,4 +24,3 @@ server:
 
 jwt:
   secret: ${JWT_KEY:sScTYTRwBK9lZ7hXMtF6nMLcQka8NgWsScTYTRwBK9lZ7hXMtF6nMLcQka8NgWsScTYTRwBK9lZ7hXMtF6nMLcQka8NgW}
-  expiration: ${JWT_EXPIRATION:60000}
