@@ -28,10 +28,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDTO createUserEntity(AddUserDTO addUserDTO) {
         UserEntity userEntity = mapAddUserDTOToUserEntity(addUserDTO);
-        //Removed check for already existing user with same email or phone:
-        /*if (checkIfUserWithSameEmailOrPhoneAlreadyExists(userEntity)) {
-            throw new RestApiBusyEmailOrPhoneNumberException("User with email " + userEntity.getEmail() + " or phone " + userEntity.getPhoneNumber() + " already exists", userEntity.getEmail(), userEntity.getPhoneNumber());
-        }*/
+
         userRepository.save(userEntity);
         return mapUserEntityToUserDTO(userEntity);
     }
@@ -55,13 +52,6 @@ public class UserServiceImpl implements UserService {
 
         UserEntity userEntity = mapUpdateUserDTOToUserEntity(updateUserDTO);
 
-        ////Removed check for another already existing user with same email or phone:
-        /*if (checkIfAnotherUserWithSameEmailOrPhoneExists(userEntity)) {
-            throw new RestApiBusyEmailOrPhoneNumberException("User with email " + userEntity.getEmail() + " or phone " + userEntity.getPhoneNumber() + " already exists", userEntity.getEmail(), userEntity.getPhoneNumber());
-        }*/
-
-        //Change in used repository method for updated UserEntity save operation - save instead of update:
-        //userRepository.updateUserEntityById(userEntity.getId(), userEntity.getFirstName(), userEntity.getLastName(), userEntity.getBirthDate(), userEntity.getPhoneNumber(), userEntity.getEmail());
         userRepository.save(userEntity);
 
         return mapUserEntityToUserDTO(userEntity);
@@ -107,34 +97,6 @@ public class UserServiceImpl implements UserService {
             return new BooleanResultDTO.Builder().data(false).build();
         }
 
-    }
-
-
-    @Override
-    public boolean checkIfUserWithSameEmailOrPhoneAlreadyExists(UserEntity userEntity) {
-
-        if (userRepository.findAllByPhoneNumberOrEmail(userEntity.getPhoneNumber(), userEntity.getEmail()).isEmpty()) {
-            return false;
-        }
-
-        return true;
-    }
-
-    @Override
-    public boolean checkIfAnotherUserWithSameEmailOrPhoneExists(UserEntity userEntity) {
-
-        List<UserEntity> foundUsers = userRepository.findAllByPhoneNumberOrEmail(userEntity.getPhoneNumber(), userEntity.getEmail());
-
-        if (foundUsers.isEmpty()) {
-            return false;
-        }
-
-        for (UserEntity foundUser : foundUsers) {
-            if (foundUser.getId() != userEntity.getId()) {
-                return true;
-            }
-        }
-        return false;
     }
 
     private UserDTO mapUserEntityToUserDTO(UserEntity user) {

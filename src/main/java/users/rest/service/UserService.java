@@ -25,7 +25,4 @@ public interface UserService {
 
     public BooleanResultDTO checkIfUserPhoneIsUnique(String phone);
 
-    public boolean checkIfUserWithSameEmailOrPhoneAlreadyExists(UserEntity userEntity);
-
-    public boolean checkIfAnotherUserWithSameEmailOrPhoneExists(UserEntity userEntity);
 }
